@@ -1,0 +1,9 @@
+<%- include("partials/header") -%>
+    <h1>Initials</h1>
+    <p><%=homeContent%></p>
+ <% body.forEach(heading=>{ %>
+  <h1>  <%= heading.title  %></h1>
+  <p> <%= heading.content %></p>
+ <% }) %>
+   
+<%- include("partials/footer") -%>
