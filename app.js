@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const _ = require('lodash');
 let posts=[];
 const homeStartingContent = "I woke up at 6 oclock in the morning. We had breakfast and dressed up. Today we all went to Fantasize Amusement park near Pune. We started from home at 7 oclock. As soon as we reached there, we bought our tickets and went inside. I was so excited seeing the rides. My parents and brother liked the Thunderfall ride. My favorite rides were Water Splash, Caterpillar Ride, Wave Pool and Pirate Ship. After a couple of hours, we had our lunch. In the afternoon we had the scariest ride that is the Space Gun. We got back to our home in the evening. It was a great day and I enjoyed a lot.";
 
@@ -13,6 +14,7 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+
 
 app.get("/",(req,res)=>{
     res.render("home",{homeContent:homeStartingContent,body:posts});
@@ -30,7 +32,9 @@ app.get("/contact",(req,res)=>{
 app.get("/compose",(req,res)=>{
     res.render("compose");
 })
-
+// app.get("/post",(req,res)=>{
+//     res.render("post",{titlePost:title1,contentPost:content1})
+// })
 app.post("/compose",(req,res)=>{
     const message=
         {
@@ -41,7 +45,20 @@ app.post("/compose",(req,res)=>{
     posts.push(message);
     res.redirect("/");
 })
+app.get("/posts/:topic",function(req,res){
+    const topic=_.lowerCase(req.params.topic);
+    posts.forEach(function(post){
+        const title1=post.title;
+        const content1=post.content;
+        const storedTitle=_.lowerCase(post.title);
+        if(topic===storedTitle){
+            res.render("post",{titlePost:title1,contentPost:content1})
+        }
+    })
+})
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");
 });
+
+
